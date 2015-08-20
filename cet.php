@@ -1,22 +1,20 @@
 <?php
 /**
  *@Filename: cet.php
- *@Function: 小瓜工大助手用户状态判断。
- *@Version: 2.0
+ *@Function: 获取cet成绩
+ *@Version: 1.1
  *@Created by: Partholon	
  *@Created time: 2015年8月19日
  */
-//查询格式为：CET 考号（15位）姓名（姓名准考证号中间有空格）如：【CET 张小洺 610021132213622】";
-$hao = $_GET['xh'];
+
+$id = $_GET['id'];
 $name = $_GET['xm'];
-//$num = strlen($hao);
-$url = "http://www.chsi.com.cn/cet/query";
-//$out = file_get_contents($url);
+
+//构造HTTP请求头
 $n2 = rand(202, 239);
 $n3 = rand(1, 254);
 $n4 = rand(1, 254);
 $ip = "42." . $n2 . "." . $n3 . "." . $n4;
-
 $header = array(
     "Host:www.chsi.com.cn",
     "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
@@ -26,6 +24,7 @@ $header = array(
     "User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.155 Safari/537.36",
     "CLIENT-IP:$ip",
     "X-FORWARDED-FOR:$ip");
+
 //获取Cookie
 $cookie = tempnam("./temp", "cookie");
 $ch = curl_init();
@@ -39,11 +38,10 @@ curl_close($ch);
 
 //header增加referer
 $header[8] = "Referer:http://www.chsi.com.cn/cet/";
-// $header[8] = "Referer:http://http://cet.99sushe.com/";
 
 //post提交
 $ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, "http://www.chsi.com.cn/cet/query?zkzh=$hao&xm=$name");//http://www.chsi.com.cn/cet/query?zkzh=$hao&xm=$name
+curl_setopt($ch, CURLOPT_URL, "http://www.chsi.com.cn/cet/query?zkzh=$id&xm=$name");
 curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 curl_setopt($ch, CURLOPT_HEADER, false);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -54,7 +52,7 @@ curl_close($ch);
 
 unlink($cookie);
 // echo $out;
-//<table border="0" align="center" cellpadding="0" cellspacing="6" class="cetTable">
+
 preg_match_all("/(<table border=\"0\" align=\"center\" cellpadding=\"0\" cellspacing=\"6\" class=\"cetTable\">[\s\S]*?<\/table>)/", $out, $matches);
 $matches = $matches[0][0];
 $matches = strip_tags($matches);
@@ -78,4 +76,5 @@ if (empty($matches)) {
     $contentStr = $matches;
 }
 
+echo $contentStr;
 ?>
