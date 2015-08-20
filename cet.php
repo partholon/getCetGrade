@@ -67,7 +67,7 @@ $fen = $fen[0][0];
 $fen = preg_replace("/总分：/", "", $fen, -1);
 $matches = preg_replace("/总分：/", "总分：\n", $matches, -1);
 if (empty($matches)) {
-       $contentStr="啊噢！没有查到！有可能因为：1格式错误。2准考证号错误。3姓名不准确。正确格式为：CET 姓名 考号（中间有空格；大小写不限；考号15位数字；姓名为身份证姓名）如：【CET 张小洺 610021132213622】";
+       $contentStr="啊噢！没有查到！有可能因为：1格式错误。2准考证号错误。3姓名不准确。";
 } else if ($fen >= 425) {
     $matches = "恭喜你CET通过了~\n-----------------------\n" . $matches;
     $contentStr = $matches;
