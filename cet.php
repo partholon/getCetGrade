@@ -39,7 +39,7 @@ curl_close($ch);
 //header增加referer
 $header[8] = "Referer:http://www.chsi.com.cn/cet/";
 
-//post提交
+//get提交
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, "http://www.chsi.com.cn/cet/query?zkzh=$id&xm=$name");
 curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
